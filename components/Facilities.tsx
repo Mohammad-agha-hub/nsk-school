@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 /* ─── Tokens ─────────────────────────────────────────── */
 const NAVY = "#0D1B38";
-const NAVY_MID = "#152344";
-const NAVY_LIFT = "#1C2F56";
+
 const GOLD = "#C9A84C";
 const GOLD_LT = "#e4c97a";
 const CRIMSON = "#C8102E";
@@ -84,7 +83,7 @@ const cards = [
     title: "Smart Classrooms",
     description:
       "Thoughtfully designed spaces with carefully managed student counts, engineered for deep focus and active participation.",
-    accent: GOLD,
+    accent: NAVY,
     icon: <IconClassroom />,
   },
   {
@@ -92,7 +91,7 @@ const cards = [
     title: "Expert Teachers",
     description:
       "A team of qualified educators committed to building a strong foundation for every child — empowering them to excel.",
-    accent: CRIMSON,
+    accent: NAVY,
     icon: <IconTeacher />,
   },
   {
@@ -100,7 +99,7 @@ const cards = [
     title: "Educational Tech",
     description:
       "Advanced audio-visual tools across every classroom. Computer education is a compulsory part of every student's curriculum.",
-    accent: GOLD,
+    accent: NAVY,
     icon: <IconDevice />,
   },
   {
@@ -108,7 +107,7 @@ const cards = [
     title: "Rich Library",
     description:
       "An excellent collection spanning arts, literature, science, and general knowledge — curated for every age and interest.",
-    accent: CRIMSON,
+    accent: NAVY,
     icon: <IconLibrary />,
   },
 ];
@@ -451,20 +450,20 @@ function FeatureCard({ card }: { card: CardData }) {
         borderRadius: 20,
         overflow: "hidden",
         cursor: "default",
-        /* Premium dark navy gradient */
+        /* Subtle white to light navy gradient */
         background: hovered
-          ? `linear-gradient(160deg, ${NAVY_LIFT} 0%, ${NAVY_MID} 45%, ${NAVY} 100%)`
-          : `linear-gradient(160deg, ${NAVY_MID} 0%, ${NAVY} 55%, #0a1628 100%)`,
-        /* Layered elevated shadow — the key to premium depth */
+          ? `linear-gradient(160deg, #ffffff 0%, #f0f4f8 35%, #e2e8f0 65%, #d5dde8 100%)`
+          : `linear-gradient(160deg, #ffffff 0%, #f5f7fa 40%, #e8edf3 75%, #d5dde8 100%)`,
+        /* Shadow */
         boxShadow: hovered
-          ? `0 32px 64px rgba(13,27,56,0.38), 0 12px 24px rgba(13,27,56,0.22), 0 4px 8px rgba(13,27,56,0.14), 0 0 0 1px rgba(255,255,255,0.06)`
-          : `0 8px 32px rgba(13,27,56,0.22), 0 2px 8px rgba(13,27,56,0.12), 0 0 0 1px rgba(255,255,255,0.04)`,
+          ? `0 32px 64px rgba(13,27,56,0.12), 0 12px 24px rgba(13,27,56,0.08), 0 4px 8px rgba(13,27,56,0.06), 0 0 0 1px rgba(13,27,56,0.06)`
+          : `0 8px 32px rgba(13,27,56,0.08), 0 2px 8px rgba(13,27,56,0.05), 0 0 0 1px rgba(13,27,56,0.04)`,
         transform: hovered ? "translateY(-6px)" : "translateY(0)",
         transition:
           "background 0.35s ease, box-shadow 0.35s ease, transform 0.32s ease",
       }}
     >
-      {/* Subtle noise-like inner highlight — top edge shimmer */}
+      {/* Subtle top edge highlight */}
       <div
         style={{
           position: "absolute",
@@ -472,7 +471,7 @@ function FeatureCard({ card }: { card: CardData }) {
           left: 0,
           right: 0,
           height: 1,
-          background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,${hovered ? "0.12" : "0.07"}) 50%, transparent 100%)`,
+          background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)`,
           transition: "all 0.35s ease",
         }}
       />
@@ -528,11 +527,9 @@ function FeatureCard({ card }: { card: CardData }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: hovered
-                ? `${card.accent}22`
-                : "rgba(255,255,255,0.07)",
-              border: `1px solid ${hovered ? card.accent + "40" : "rgba(255,255,255,0.1)"}`,
-              color: hovered ? card.accent : "rgba(255,255,255,0.7)",
+              background: hovered ? `${card.accent}18` : "rgba(13,27,56,0.05)",
+              border: `1px solid ${hovered ? card.accent + "40" : "rgba(13,27,56,0.1)"}`,
+              color: hovered ? card.accent : NAVY,
               transition: "all 0.3s ease",
             }}
           >
@@ -546,7 +543,7 @@ function FeatureCard({ card }: { card: CardData }) {
               fontWeight: 600,
               fontSize: "0.68rem",
               letterSpacing: "0.2em",
-              color: "rgba(255,255,255,0.14)",
+              color: "rgba(13,27,56,0.15)",
             }}
           >
             {card.id}
@@ -561,7 +558,7 @@ function FeatureCard({ card }: { card: CardData }) {
               fontWeight: 600,
               fontSize: "1.1rem",
               lineHeight: 1.3,
-              color: "#ffffff",
+              color: NAVY,
               marginBottom: 10,
             }}
           >
@@ -572,7 +569,7 @@ function FeatureCard({ card }: { card: CardData }) {
               fontFamily: "'Inter', sans-serif",
               fontSize: "0.8rem",
               lineHeight: 1.75,
-              color: "rgba(255,255,255,0.45)",
+              color: SLATE,
             }}
           >
             {card.description}
@@ -583,7 +580,7 @@ function FeatureCard({ card }: { card: CardData }) {
         <div
           style={{
             paddingTop: 16,
-            borderTop: `1px solid rgba(255,255,255,${hovered ? "0.1" : "0.06"})`,
+            borderTop: `1px solid rgba(13,27,56,${hovered ? "0.12" : "0.08"})`,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -614,43 +611,11 @@ function FeatureCard({ card }: { card: CardData }) {
           </div>
 
           {/* Arrow button */}
-          <div
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: hovered
-                ? `${card.accent}20`
-                : "rgba(255,255,255,0.06)",
-              border: `1px solid ${hovered ? card.accent + "50" : "rgba(255,255,255,0.1)"}`,
-              color: hovered ? card.accent : "rgba(255,255,255,0.3)",
-              transition: "all 0.3s ease",
-            }}
-          >
-            <svg
-              style={{
-                width: 13,
-                height: 13,
-                transform: hovered ? "translate(1px,-1px)" : "none",
-                transition: "transform 0.2s ease",
-              }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 17L17 7M7 7h10v10"
-              />
-            </svg>
+          
+            
           </div>
         </div>
       </div>
-    </div>
+   
   );
 }
