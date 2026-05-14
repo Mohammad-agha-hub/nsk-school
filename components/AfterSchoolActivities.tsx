@@ -75,7 +75,7 @@ const activities = [
         <circle cx="18" cy="16" r="3" />
       </svg>
     ),
-    title: "Dance & Music",
+    title: "Dance And Music",
     tag: "Performing Arts",
     description:
       "Dance music encompasses a vast range of genres and traditions. Our programs blend classical forms like Bharatanatyam with contemporary movement, helping students discover rhythm, expression, and artistic confidence.",

@@ -1,6 +1,6 @@
 import AboutUs from '@/components/AboutUs';
 import EliteFacilities from '@/components/Facilities';
-import Footer from '@/components/Footer';
+
 import LandingPage from '@/components/Hero'
 import SchoolLevelsSection from '@/components/SchoolLevels';
 import ImageGallary from '@/components/ImageGallary'
