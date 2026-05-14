@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
+import Footer from "@/components/Footer";
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -38,7 +38,9 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${jakartaSans.variable} ${inter.variable}`}
     >
+      
       <body>{children}</body>
+      <Footer />
     </html>
   );
 }

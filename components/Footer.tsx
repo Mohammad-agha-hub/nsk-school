@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  
-  MessageCircle,
-  MapPin,
-  Mail,
-  Phone,
-  Navigation,
-} from "lucide-react";
+import { MapPin, Mail, Phone, Navigation } from "lucide-react";
 
 const Footer = () => {
   const quickLinks = [
@@ -26,10 +19,58 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    // { icon: Facebook, href: "#", label: "Facebook" },
-    // { icon: Instagram, href: "#", label: "Instagram" },
-    // { icon: Youtube, href: "#", label: "YouTube" },
-    { icon: MessageCircle, href: "#", label: "Chat" },
+    {
+      label: "Facebook",
+      href: "#",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      ),
+    },
+    {
+      label: "Instagram",
+      href: "#",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          width="17"
+          height="17"
+        >
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      ),
+    },
+    {
+      label: "YouTube",
+      href: "#",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+          <polygon
+            points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"
+            fill="white"
+          />
+        </svg>
+      ),
+    },
+    {
+      label: "WhatsApp",
+      href: "#",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.845L.057 23.215a.75.75 0 0 0 .916.916l5.37-1.471A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 0 1-5.073-1.384l-.361-.214-3.735 1.023 1.023-3.735-.214-.361A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
+        </svg>
+      ),
+    },
   ];
 
   return (
@@ -39,7 +80,6 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand Section */}
           <div className="flex flex-col gap-5">
-            {/* Logo */}
             <div>
               <span className="text-2xl font-extrabold tracking-tight text-white">
                 NSK{" "}
@@ -49,22 +89,20 @@ const Footer = () => {
               </span>
             </div>
 
-            {/* Tagline */}
             <p className="text-sm text-gray-300 leading-relaxed max-w-xs">
               Quality Education for a Brighter Tomorrow. Nurturing young minds
               with academic excellence and character building since 2000.
             </p>
 
-            {/* Social Icons */}
             <div className="flex gap-3 mt-1">
-              {socialLinks.map(({ icon: Icon, href, label }) => (
+              {socialLinks.map(({ icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
                   className="w-10 h-10 rounded-md border border-white/20 flex items-center justify-center text-gray-300 hover:text-white hover:border-white/50 hover:bg-white/10 transition-all duration-200"
                 >
-                  <Icon size={17} />
+                  {icon}
                 </a>
               ))}
             </div>
@@ -114,15 +152,12 @@ const Footer = () => {
               Contact Us
             </h3>
             <ul className="flex flex-col gap-4">
-              {/* Address */}
               <li className="flex items-start gap-3">
                 <MapPin size={17} className="text-[#e5a020] mt-0.5 shrink-0" />
                 <span className="text-sm text-gray-300 leading-snug">
                   Chandu, opp. Petrol Pump, Bahadurgarh, Haryana - 124505
                 </span>
               </li>
-
-              {/* Email */}
               <li className="flex items-center gap-3">
                 <Mail size={17} className="text-[#e5a020] shrink-0" />
                 <a
@@ -132,8 +167,6 @@ const Footer = () => {
                   nskhschool@gmail.com
                 </a>
               </li>
-
-              {/* Phone */}
               <li className="flex items-center gap-3">
                 <Phone size={17} className="text-[#e5a020] shrink-0" />
                 <a
@@ -143,8 +176,6 @@ const Footer = () => {
                   +91 88130 09409
                 </a>
               </li>
-
-              {/* Get Directions Button */}
               <li className="mt-1">
                 <a
                   href="#"

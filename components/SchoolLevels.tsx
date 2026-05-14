@@ -1,26 +1,67 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
-/* ── font import via next/head or just a global style tag ── */
 const FONT_URL =
   "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap";
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
+const CRIMSON = "#C8102E";
 
-/* ── data ─────────────────────────────────────────────────── */
+/* ── Animation variants ───────────────────────────────────── */
+const sectionContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13, delayChildren: 0.1 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+const cardVariant = (delay: number) => ({
+  hidden: { opacity: 0, y: 36 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1] as const,
+      delay: delay / 1000,
+    },
+  },
+});
+
+const ctaVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+};
+
+const ctaItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+/* ── Data ─────────────────────────────────────────────────── */
 const levels = [
   {
     id: "pre-primary",
-    
     title: "Pre Primary",
     description: "",
-    img: "/pre-primary.jpg", // ← replace with your asset
-    size: "large", // occupies left column
+    img: "/pre-primary.jpg",
+    size: "large",
   },
   {
     id: "primary",
-  
     title: "Primary School",
     description: "",
     img: "/primary.jpg",
@@ -28,78 +69,49 @@ const levels = [
   },
   {
     id: "secondary",
-   
     title: "Secondary School",
-    
     img: "/secondary.jpg",
     size: "small",
   },
   {
     id: "high",
-  
     title: "High School",
     description: "",
     img: "/high.jpg",
-    size: "wide", // spans both right sub-columns
+    size: "wide",
   },
 ];
 
-/* ── useInView ────────────────────────────────────────────── */
-function useInView(threshold = 0.08) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setInView(true);
-      },
-      { threshold },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
 /* ── Section ──────────────────────────────────────────────── */
 export default function SchoolLevelsSection() {
-  const { ref, inView } = useInView();
-
   return (
     <>
       <style>{`@import url('${FONT_URL}');`}</style>
 
-      <section
-        ref={ref}
-        className="bg-[#E6F2F8] py-24 px-4 relative overflow-hidden"
-      >
-        {/* subtle radial glow top-right */}
+      <section className="bg-[#E6F2F8] py-24 px-4 relative overflow-hidden">
+        {/* subtle radial glow */}
         <div className="pointer-events-none absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-white/20 blur-3xl" />
 
         <div className="max-w-6xl mx-auto">
-          {/* ── Heading ─────────────────────────────────────── */}
-          <div
-            className="text-center mb-14 transition-all duration-700"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0)" : "translateY(24px)",
-            }}
+          {/* ── Heading ── */}
+          <motion.div
+            className="text-center mb-14"
+            variants={sectionContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
           >
-            {/* eyebrow */}
-            <div className="inline-flex items-center gap-2 mb-4">
-              <span className="block w-6 h-px bg-[#C8102E]" />
-              <span
-                className="text-[#C8102E] text-xs font-semibold tracking-[.22em] uppercase"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
-              >
+            <motion.div
+              variants={fadeUp}
+            
+            >
+              <span className="text-red-700 text-sm font-semibold tracking-[0.2em] mb-2 uppercase font-body">
                 Academics
               </span>
-            </div>
+            </motion.div>
 
-            <h2
+            <motion.h2
+              variants={fadeUp}
               className="text-4xl md:text-[3rem] leading-tight mb-5"
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
@@ -108,61 +120,120 @@ export default function SchoolLevelsSection() {
                 letterSpacing: "-0.01em",
               }}
             >
-             School{" "}
+              School{" "}
               <em style={{ fontStyle: "italic", color: GOLD }}>Levels</em>
-            </h2>
-
-            <p
-              className="text-slate-500 text-sm leading-relaxed max-w-lg mx-auto"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            </motion.h2>
+            <motion.div
+              variants={fadeUp}
+              className="flex items-center justify-center gap-3 mb-5"
+            >
+              <div
+                className="h-px w-16"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${NAVY}20)`,
+                }}
+              />
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: GOLD, display: "inline-block" }}
+              />
+              <span
+                className="w-2 h-2 rounded-full border"
+                style={{ borderColor: `${NAVY}28`, display: "inline-block" }}
+              />
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: GOLD, display: "inline-block" }}
+              />
+              <div
+                className="h-px w-16"
+                style={{
+                  background: `linear-gradient(90deg, ${NAVY}20, transparent)`,
+                }}
+              />
+            </motion.div>
+            <motion.p
+              variants={fadeUp}
+              className="text-slate-500 text-sm leading-relaxed max-w-lg mx-auto font-body"
             >
               NSK School has four levels of schooling. Here, students are
               groomed and molded at every stage of the schooling journey.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          {/* ── Grid ────────────────────────────────────────── */}
-          {/*
-            Outer: 2 cols  [large-card | right-panel]
-            Right: 2x2     [small small]
-                           [wide  wide ]
-          */}
+          {/* ── Grid ── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* ── Large card — Pre Primary ── */}
-            <LevelCard
-              level={levels[0]}
+            {/* Large card — Pre Primary */}
+            <motion.div
               className="h-[520px] lg:h-full min-h-[460px]"
-              inView={inView}
-              delay={0}
-            />
+              variants={cardVariant(0)}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-40px" }}
+            >
+              <LevelCard level={levels[0]} className="h-full" />
+            </motion.div>
 
-            {/* ── Right panel ── */}
+            {/* Right panel */}
             <div className="grid grid-cols-2 grid-rows-2 gap-4">
-              {/* Primary */}
-              <LevelCard
-                level={levels[1]}
+              <motion.div
                 className="h-[230px]"
-                inView={inView}
-                delay={120}
-              />
+                variants={cardVariant(120)}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+              >
+                <LevelCard level={levels[1]} className="h-full" />
+              </motion.div>
 
-              {/* Secondary */}
-              <LevelCard
-                level={levels[2]}
+              <motion.div
                 className="h-[230px]"
-                inView={inView}
-                delay={200}
-              />
+                variants={cardVariant(200)}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+              >
+                <LevelCard level={levels[2]} className="h-full" />
+              </motion.div>
 
-              {/* High School — spans both columns */}
-              <LevelCard
-                level={levels[3]}
+              <motion.div
                 className="col-span-2 h-[230px]"
-                inView={inView}
-                delay={300}
-              />
+                variants={cardVariant(300)}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
+              >
+                <LevelCard level={levels[3]} className="h-full" />
+              </motion.div>
             </div>
           </div>
+
+          {/* ── CTAs ── */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-3 justify-center mt-12"
+            variants={ctaVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
+          >
+            <motion.button
+              variants={ctaItem}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40 font-body"
+            >
+              Enroll Now
+            </motion.button>
+
+            <motion.button
+              variants={ctaItem}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-white/40 hover:bg-white/60 border border-[#0D1B38]/20 text-[#0D1B38]/80 px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer"
+            >
+              Book a Visit
+            </motion.button>
+          </motion.div>
         </div>
       </section>
     </>
@@ -173,25 +244,18 @@ export default function SchoolLevelsSection() {
 interface LevelCardProps {
   level: (typeof levels)[number];
   className?: string;
-  inView: boolean;
-  delay: number;
 }
 
-function LevelCard({ level, className = "", inView, delay }: LevelCardProps) {
+function LevelCard({ level, className = "" }: LevelCardProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
     <div
       className={`relative rounded-2xl overflow-hidden cursor-pointer ${className}`}
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(36px)",
-        transition: `opacity .6s ease ${delay}ms, transform .6s ease ${delay}ms`,
-      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* ── Background image ── */}
+      {/* Background image */}
       <img
         src={level.img}
         alt={level.title}
@@ -202,7 +266,7 @@ function LevelCard({ level, className = "", inView, delay }: LevelCardProps) {
         }}
       />
 
-      {/* ── Gradient overlay ── */}
+      {/* Gradient overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -213,11 +277,8 @@ function LevelCard({ level, className = "", inView, delay }: LevelCardProps) {
         }}
       />
 
-      {/* ── Content ── */}
+      {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-5">
-        
-
-        {/* Title */}
         <h3
           className="text-white font-bold leading-tight mb-1"
           style={{
@@ -228,7 +289,6 @@ function LevelCard({ level, className = "", inView, delay }: LevelCardProps) {
           {level.title}
         </h3>
 
-        {/* Description — only some cards */}
         {level.description && (
           <p
             className="text-white/75 text-xs leading-relaxed mt-1"

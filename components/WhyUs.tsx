@@ -1,12 +1,54 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-/* ─── Tokens — identical to the rest of the site ─────────── */
+/* ─── Tokens ─────────────────────────────────────────────── */
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
 const CRIMSON = "#C8102E";
 const SLATE = "#64748B";
+
+/* ─── Animation variants ─────────────────────────────────── */
+const sectionContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.13, delayChildren: 0.1 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+const cardVariant = (i: number) => ({
+  hidden: { opacity: 0, y: 40 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1] as const,
+      delay: 0.15 + i * 0.15,
+    },
+  },
+});
+
+const ctaVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+};
+
+const ctaItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
 
 /* ─── Data ────────────────────────────────────────────────── */
 const items = [
@@ -46,8 +88,7 @@ const items = [
         style={{ width: 20, height: 20 }}
       >
         <rect x="2" y="3" width="20" height="14" rx="2" />
-        <path d="M8 21h8M12 17v4" />
-        <path d="M6 8h8M6 11h5" />
+        <path d="M8 21h8M12 17v4M6 8h8M6 11h5" />
       </svg>
     ),
   },
@@ -74,29 +115,8 @@ const items = [
   },
 ];
 
-/* ─── Intersection hook ───────────────────────────────────── */
-function useInView(threshold = 0.08) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setInView(true);
-      },
-      { threshold },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, inView };
-}
-
 /* ─── Section ─────────────────────────────────────────────── */
 export default function WhyUs() {
-  const { ref, inView } = useInView();
-
   return (
     <>
       <style>{`
@@ -107,12 +127,8 @@ export default function WhyUs() {
           grid-template-columns: repeat(3, 1fr);
           gap: 28px;
         }
-        @media (max-width: 1023px) {
-          .whyus-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 599px) {
-          .whyus-grid { grid-template-columns: 1fr !important; }
-        }
+        @media (max-width: 1023px) { .whyus-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 599px)  { .whyus-grid { grid-template-columns: 1fr; } }
 
         .wu-card {
           position: relative;
@@ -135,11 +151,9 @@ export default function WhyUs() {
           box-shadow: 0 20px 48px rgba(13,27,56,.12), 0 4px 16px rgba(13,27,56,.06);
           transform: translateY(-5px);
         }
-
         .wu-num-ghost {
           position: absolute;
-          bottom: -10px;
-          right: 14px;
+          bottom: -10px; right: 14px;
           font-family: 'Playfair Display', Georgia, serif;
           font-weight: 700;
           font-size: 7rem;
@@ -151,18 +165,12 @@ export default function WhyUs() {
           letter-spacing: -0.04em;
           transition: color .3s ease, opacity .3s ease;
         }
-        .wu-card:hover .wu-num-ghost {
-          color: ${CRIMSON};
-          opacity: .055;
-        }
+        .wu-card:hover .wu-num-ghost { color: ${CRIMSON}; opacity: .055; }
 
         .wu-icon-wrap {
-          width: 40px;
-          height: 40px;
+          width: 40px; height: 40px;
           border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: flex; align-items: center; justify-content: center;
           background: rgba(13,27,56,.06);
           border: 1px solid rgba(13,27,56,.10);
           color: ${NAVY};
@@ -173,64 +181,37 @@ export default function WhyUs() {
           border-color: rgba(200,16,46,.22);
           color: ${CRIMSON};
         }
-
-        .wu-num-badge {
-          font-family: 'Playfair Display', Georgia, serif;
-          font-weight: 600;
-          font-size: .7rem;
-          letter-spacing: .12em;
-          color: ${SLATE};
-          transition: color .3s ease;
-        }
-        .wu-card:hover .wu-num-badge { color: ${CRIMSON}; }
-
         .wu-footer-dot {
-          width: 5px;
-          height: 5px;
+          width: 5px; height: 5px;
           border-radius: 50%;
           background: ${CRIMSON};
           opacity: .35;
           transition: opacity .3s ease;
         }
         .wu-card:hover .wu-footer-dot { opacity: 1; }
-
         .wu-footer-line {
-          height: 1px;
-          width: 28px;
+          height: 1px; width: 28px;
           background: linear-gradient(90deg, rgba(200,16,46,.7), transparent);
           opacity: .25;
           transition: opacity .3s ease, width .3s ease;
         }
         .wu-card:hover .wu-footer-line { opacity: 1; width: 40px; }
-
         .wu-footer-bar {
           padding-top: 16px;
           border-top: 1px solid rgba(0,0,0,.06);
           transition: border-color .3s ease;
         }
         .wu-card:hover .wu-footer-bar { border-top-color: rgba(200,16,46,.18); }
-
-        /* entrance */
-        .wu-fade {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: opacity .65s ease, transform .65s ease;
-        }
-        .wu-fade.in {
-          opacity: 1;
-          transform: translateY(0);
-        }
       `}</style>
 
       <section
-        ref={ref}
         style={{
           position: "relative",
           background: "#fff",
           padding: "112px 16px",
         }}
       >
-        {/* Top hairline */}
+        {/* Hairlines */}
         <div
           style={{
             position: "absolute",
@@ -242,7 +223,6 @@ export default function WhyUs() {
               "linear-gradient(90deg,transparent,rgba(201,168,76,.28) 40%,rgba(13,27,56,.10) 60%,transparent)",
           }}
         />
-        {/* Bottom hairline */}
         <div
           style={{
             position: "absolute",
@@ -256,26 +236,23 @@ export default function WhyUs() {
         />
 
         <div style={{ maxWidth: 1152, margin: "0 auto" }}>
-          {/* ── Heading — matches site pattern exactly ── */}
-          <div
-            className={`wu-fade ${inView ? "in" : ""}`}
+          {/* ── Heading ── */}
+          <motion.div
             style={{ textAlign: "center", marginBottom: 80 }}
+            variants={sectionContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
           >
-            <p
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 600,
-                fontSize: ".7rem",
-                letterSpacing: ".3em",
-                textTransform: "uppercase",
-                color: GOLD,
-                marginBottom: 16,
-              }}
+            <motion.p
+              variants={fadeUp}
+              className="text-red-700 text-sm font-semibold tracking-[0.2em] uppercase font-body mb-2"
             >
               What Makes Us Special
-            </p>
+            </motion.p>
 
-            <h2
+            <motion.h2
+              variants={fadeUp}
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontWeight: 700,
@@ -288,10 +265,10 @@ export default function WhyUs() {
             >
               Building Children Who{" "}
               <em style={{ fontStyle: "italic", color: GOLD }}>Excel</em>
-            </h2>
+            </motion.h2>
 
-            {/* Ornament — same dots as FeaturesSection */}
-            <div
+            <motion.div
+              variants={fadeUp}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -338,9 +315,10 @@ export default function WhyUs() {
                   background: `linear-gradient(90deg,${NAVY}18,transparent)`,
                 }}
               />
-            </div>
+            </motion.div>
 
-            <p
+            <motion.p
+              variants={fadeUp}
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: ".875rem",
@@ -352,19 +330,21 @@ export default function WhyUs() {
             >
               Three founding principles that shape every student's journey —
               from their very first day to their brightest future.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* ── Cards ── */}
           <div className="whyus-grid">
             {items.map((item, i) => (
-              <div
+              <motion.div
                 key={item.num}
-                className={`wu-card wu-fade ${inView ? "in" : ""}`}
-                style={{ transitionDelay: `${0.15 + i * 0.15}s` }}
+                className="wu-card"
+                variants={cardVariant(i)}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-40px" }}
               >
                 <div className="wu-num-ghost">{item.num}</div>
-
                 <div
                   style={{
                     padding: "28px 26px 28px 28px",
@@ -373,7 +353,6 @@ export default function WhyUs() {
                     gap: 18,
                   }}
                 >
-                  {/* Top row */}
                   <div
                     style={{
                       display: "flex",
@@ -382,10 +361,7 @@ export default function WhyUs() {
                     }}
                   >
                     <div className="wu-icon-wrap">{item.icon}</div>
-                  
                   </div>
-
-                  {/* Text */}
                   <div>
                     <h3
                       style={{
@@ -410,8 +386,6 @@ export default function WhyUs() {
                       {item.description}
                     </p>
                   </div>
-
-                  {/* Footer accent line */}
                   <div
                     className="wu-footer-bar"
                     style={{ display: "flex", alignItems: "center", gap: 6 }}
@@ -420,116 +394,90 @@ export default function WhyUs() {
                     <div className="wu-footer-line" />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* ── CTAs ── */}
-          <div
-            className={`wu-fade ${inView ? "in" : ""}`}
+          <motion.div
             style={{
-              transitionDelay: "0.65s",
               marginTop: 72,
               display: "flex",
               flexWrap: "wrap",
               alignItems: "center",
               justifyContent: "center",
-              gap: 16,
+              gap: 12,
             }}
+            variants={ctaVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
           >
-            <CtaPrimary />
-            <CtaSecondary />
-          </div>
+            <motion.a
+              className=" bg-red-600
+              hover:bg-red-700
+              active:bg-red-800"
+              variants={ctaItem}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              href="#"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "12px 40px",
+                borderRadius: 8,
+
+                color: "#fff",
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+                fontSize: ".875rem",
+                textDecoration: "none",
+                boxShadow: "0 4px 24px rgba(200,16,46,.35)",
+                cursor: "pointer",
+              }}
+            >
+              Apply Now
+            </motion.a>
+
+            <motion.a
+              variants={ctaItem}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              href="tel:9728352281"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "12px 40px",
+                borderRadius: 8,
+                background: "rgba(13,27,56,0.04)",
+                border: "1px solid rgba(13,27,56,0.18)",
+                color: NAVY,
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 600,
+                fontSize: ".875rem",
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              <svg
+                style={{ width: 15, height: 15 }}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              9728352281
+            </motion.a>
+          </motion.div>
         </div>
       </section>
     </>
-  );
-}
-
-function CtaPrimary() {
-  const [h, setH] = useState(false);
-  return (
-    <a
-      href="#"
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "13px 30px",
-        borderRadius: 9999,
-        background: CRIMSON,
-        color: "#fff",
-        fontFamily: "'Inter', sans-serif",
-        fontWeight: 600,
-        fontSize: ".875rem",
-        textDecoration: "none",
-        boxShadow: "0 4px 20px rgba(200,16,46,.22)",
-        transform: h ? "translateY(-2px)" : "none",
-        transition: "transform .25s ease",
-      }}
-    >
-      Apply Now
-      <svg
-        style={{
-          width: 15,
-          height: 15,
-          transform: h ? "translateX(3px)" : "none",
-          transition: "transform .2s ease",
-        }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M17 8l4 4m0 0l-4 4m4-4H3"
-        />
-      </svg>
-    </a>
-  );
-}
-
-function CtaSecondary() {
-  const [h, setH] = useState(false);
-  return (
-    <a
-      href="tel:9728352281"
-      onMouseEnter={() => setH(true)}
-      onMouseLeave={() => setH(false)}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "13px 30px",
-        borderRadius: 9999,
-        border: "1px solid rgba(13,27,56,.18)",
-        color: NAVY,
-        fontFamily: "'Inter', sans-serif",
-        fontWeight: 500,
-        fontSize: ".875rem",
-        textDecoration: "none",
-        transform: h ? "translateY(-2px)" : "none",
-        transition: "transform .25s ease",
-      }}
-    >
-      <svg
-        style={{ width: 15, height: 15 }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-        />
-      </svg>
-      9728352281
-    </a>
   );
 }
