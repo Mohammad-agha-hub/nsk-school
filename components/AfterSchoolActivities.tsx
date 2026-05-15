@@ -29,7 +29,7 @@ const activities = [
         <path d="M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
       </svg>
     ),
-    title: "Drawing & Coloring",
+    title: "Drawing And Coloring",
     tag: "Creative Arts",
     description:
       "Coloring is not only a favorite pastime, but it is also a great way to introduce new ideas, develop fine motor skills, and recognize colors. Our preschool worksheets help children learn numbers, letters, sight words, and rhymes.",
@@ -360,40 +360,7 @@ export default function AfterSchoolActivities() {
             ))}
           </div>
 
-          {/* ── CTAs ── */}
-          <div
-            className="flex flex-wrap items-center justify-center gap-3 mt-14"
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.7s ease 500ms, transform 0.7s ease 500ms",
-            }}
-          >
-            {/* Primary — matches landing page exactly */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              Explore All Activities
-            </motion.button>
-
-            {/* Ghost — matches landing page exactly */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="hover:bg-slate-50 transition-colors duration-150 text-sm font-semibold rounded-lg px-10 py-3 cursor-pointer"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                background: "transparent",
-                border: `1.5px solid rgba(13,27,56,0.22)`,
-                color: NAVY,
-              }}
-            >
-              View Schedule
-            </motion.button>
-          </div>
+         
         </div>
       </section>
     </>

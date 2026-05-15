@@ -208,7 +208,7 @@ export default function LandingPage() {
                   <motion.div
                     key={i}
                     variants={statItem}
-                    className="flex items-center justify-center gap-4 px-8 py-5"
+                    className="flex items-center gap-4 px-8 py-5 sm:justify-center"
                   >
                     <div
                       className={`w-[60px] h-[60px] flex-shrink-0 flex items-center justify-center ${

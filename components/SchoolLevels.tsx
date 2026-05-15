@@ -101,10 +101,7 @@ export default function SchoolLevelsSection() {
             whileInView="show"
             viewport={{ once: true, margin: "-60px" }}
           >
-            <motion.div
-              variants={fadeUp}
-            
-            >
+            <motion.div variants={fadeUp}>
               <span className="text-red-700 text-sm font-semibold tracking-[0.2em] mb-2 uppercase font-body">
                 Academics
               </span>
@@ -208,32 +205,7 @@ export default function SchoolLevelsSection() {
             </div>
           </div>
 
-          {/* ── CTAs ── */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-3 justify-center mt-12"
-            variants={ctaVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-40px" }}
-          >
-            <motion.button
-              variants={ctaItem}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40 font-body"
-            >
-              Enroll Now
-            </motion.button>
-
-            <motion.button
-              variants={ctaItem}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-white/40 hover:bg-white/60 border border-[#0D1B38]/20 text-[#0D1B38]/80 px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer"
-            >
-              Book a Visit
-            </motion.button>
-          </motion.div>
+         
         </div>
       </section>
     </>

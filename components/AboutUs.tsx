@@ -329,7 +329,7 @@ const AboutUs = () => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-red-600 hover:bg-red-700 w-[40%] active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40"
+                    className="bg-red-600 hover:bg-red-700 w-[80%] sm:w-[40%] active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40"
                   >
                     Book An Appointment
                   </motion.button>

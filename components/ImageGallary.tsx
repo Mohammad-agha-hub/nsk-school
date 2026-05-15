@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 
-/* ── fonts ─────────────────────────────────────────────────── */
 const FONT_URL =
   "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@400;500;600&display=swap";
 
@@ -11,20 +10,18 @@ const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
 const CRIMSON = "#C8102E";
 
-/* ── gallery data ───────────────────────────────────────────── */
 const photos = [
-  { id: 1, src: "/img-1.jpg", area: "1 / 1 / 3 / 3" }, // 2×2 — large feature
-  { id: 2, src: "/img-2.jpg", area: "1 / 3 / 2 / 4" }, // top-right small
-  { id: 3, src: "/img-3.jpg", area: "1 / 4 / 2 / 5" }, // top-far-right small
-  { id: 4, src: "/img-4.jpg", area: "2 / 3 / 3 / 5" }, // right wide
-  { id: 5, src: "/img-5.jpg", area: "3 / 1 / 4 / 2" }, // bottom-left small
-  { id: 6, src: "/img-6.jpg", area: "3 / 2 / 4 / 4" }, // bottom middle-wide
-  { id: 7, src: "/img-7.jpg", area: "3 / 4 / 4 / 5" }, // bottom-right small
-  { id: 8, src: "/img-8.jpg", area: "4 / 1 / 5 / 3" }, // bottom-left wide
-  { id: 9, src: "/img-9.jpg", area: "4 / 3 / 5 / 5" }, // bottom-right wide
+  { id: 1, src: "/img-1.jpg", area: "1 / 1 / 3 / 3" },
+  { id: 2, src: "/img-2.jpg", area: "1 / 3 / 2 / 4" },
+  { id: 3, src: "/img-3.jpg", area: "1 / 4 / 2 / 5" },
+  { id: 4, src: "/img-4.jpg", area: "2 / 3 / 3 / 5" },
+  { id: 5, src: "/img-5.jpg", area: "3 / 1 / 4 / 2" },
+  { id: 6, src: "/img-6.jpg", area: "3 / 2 / 4 / 4" },
+  { id: 7, src: "/img-7.jpg", area: "3 / 4 / 4 / 5" },
+  { id: 8, src: "/img-8.jpg", area: "4 / 1 / 5 / 3" },
+  { id: 9, src: "/img-9.jpg", area: "4 / 3 / 5 / 5" },
 ];
 
-/* ── useInView ──────────────────────────────────────────────── */
 function useInView(threshold = 0.06) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -43,7 +40,6 @@ function useInView(threshold = 0.06) {
   return { ref, inView };
 }
 
-/* ── Section ────────────────────────────────────────────────── */
 export default function GallerySection() {
   const { ref, inView } = useInView();
 
@@ -52,7 +48,6 @@ export default function GallerySection() {
       <style>{`
         @import url('${FONT_URL}');
 
-        /* ── card image zoom ── */
         .gallery-card-img {
           transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -60,7 +55,6 @@ export default function GallerySection() {
           transform: scale(1.08);
         }
 
-        /* ── overlay fade ── */
         .gallery-overlay {
           background: linear-gradient(
             to top,
@@ -75,7 +69,6 @@ export default function GallerySection() {
           opacity: 1;
         }
 
-        /* ── bottom content slide up ── */
         .gallery-content {
           transform: translateY(10px);
           opacity: 0;
@@ -86,7 +79,6 @@ export default function GallerySection() {
           opacity: 1;
         }
 
-        /* ── arrow icon ── */
         .gallery-arrow {
           transform: translateY(4px) scale(0.8);
           opacity: 0;
@@ -97,7 +89,6 @@ export default function GallerySection() {
           opacity: 1;
         }
 
-        /* ── gold shimmer border ── */
         .gallery-card::after {
           content: '';
           position: absolute;
@@ -112,7 +103,6 @@ export default function GallerySection() {
           border-color: rgba(201,168,76,0.6);
         }
 
-        /* ── CTA button ── */
         .gallery-cta {
           display: inline-flex;
           align-items: center;
@@ -124,15 +114,12 @@ export default function GallerySection() {
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.02em;
-          
           color: #fff;
           box-shadow: 0 4px 24px rgba(200,16,46,0.35);
           transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
-          font-family: "'DM Sans', sans-serif";
           text-decoration: none;
         }
         .gallery-cta:hover {
-          
           box-shadow: 0 8px 32px rgba(200,16,46,0.45);
           transform: translateY(-1px);
         }
@@ -145,6 +132,25 @@ export default function GallerySection() {
         .gallery-cta:hover .cta-arrow {
           transform: translate(2px, -2px);
         }
+
+        /* ── Responsive grid ── */
+        .gallery-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          grid-template-rows: repeat(4, 210px);
+          gap: 14px;
+        }
+
+        @media (max-width: 640px) {
+          .gallery-grid {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(5, 200px);
+            gap: 10px;
+          }
+          .gallery-grid .gallery-card {
+            grid-area: auto !important;
+          }
+        }
       `}</style>
 
       <section
@@ -156,7 +162,7 @@ export default function GallerySection() {
           overflow: "hidden",
         }}
       >
-        {/* Hairlines matching features section */}
+        {/* Hairlines */}
         <div
           style={{
             position: "absolute",
@@ -286,14 +292,7 @@ export default function GallerySection() {
           </div>
 
           {/* ── Bento Grid ── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gridTemplateRows: "repeat(4, 210px)",
-              gap: "14px",
-            }}
-          >
+          <div className="gallery-grid">
             {photos.map((photo, i) => (
               <GalleryCard
                 key={photo.id}
@@ -317,9 +316,7 @@ export default function GallerySection() {
           >
             <a
               href="#"
-              className="gallery-cta  bg-red-600
-              hover:bg-red-700
-              active:bg-red-800"
+              className="gallery-cta bg-red-600 hover:bg-red-700 active:bg-red-800"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
               View Full Gallery
@@ -332,7 +329,7 @@ export default function GallerySection() {
   );
 }
 
-/* ── GalleryCard ────────────────────────────────────────────── */
+/* ── GalleryCard ── */
 interface GalleryCardProps {
   photo: (typeof photos)[number];
   inView: boolean;
@@ -357,7 +354,6 @@ function GalleryCard({ photo, inView, delay }: GalleryCardProps) {
         boxShadow: "0 4px 24px rgba(13,27,56,0.10)",
       }}
     >
-      {/* Image */}
       <img
         src={photo.src}
         className="gallery-card-img"
@@ -370,13 +366,11 @@ function GalleryCard({ photo, inView, delay }: GalleryCardProps) {
         }}
       />
 
-      {/* Gradient overlay */}
       <div
         className="gallery-overlay"
         style={{ position: "absolute", inset: 0, zIndex: 1 }}
       />
 
-      {/* Bottom content (shown on hover) */}
       <div
         className="gallery-content"
         style={{
@@ -391,7 +385,6 @@ function GalleryCard({ photo, inView, delay }: GalleryCardProps) {
           justifyContent: "space-between",
         }}
       >
-        {/* Gold accent line */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div
             style={{
@@ -415,7 +408,6 @@ function GalleryCard({ photo, inView, delay }: GalleryCardProps) {
           </span>
         </div>
 
-        {/* Arrow icon */}
         <div
           className="gallery-arrow"
           style={{

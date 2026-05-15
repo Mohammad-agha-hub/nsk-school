@@ -417,24 +417,6 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* ── CTA ── */}
-        <div
-          className="ts-cta-wrap"
-          style={{
-            opacity: inView ? 1 : 0,
-            transform: inView ? "translateY(0)" : "translateY(20px)",
-          }}
-        >
-          <a
-            href="#"
-            className="ts-cta  bg-red-600
-              hover:bg-red-700
-              active:bg-red-800"
-          >
-            Read All Reviews
-            <ArrowUpRight size={16} className="cta-arrow" />
-          </a>
-        </div>
       </section>
     </>
   );
