@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
 
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
@@ -35,16 +34,34 @@ const testimonials = [
       "NSK High School provides a great learning environment for students. The teachers are very supportive and always encourage students to do their best in academics and extracurricular activities.",
   },
   {
-    name: "Priya Mehta",
+    name: "Riya Verma",
     stars: 5,
     quote:
-      "The faculty here goes above and beyond. Every concept is taught with patience and clarity. My confidence has grown tremendously since I joined, and I feel truly prepared for my future.",
+      "My child has improved alot after joining NSK High Schoo. The school focuses not only on studies but also on discipline and personality development.",
   },
   {
-    name: "Rohan Verma",
+    name: "Rahul Gupta",
     stars: 5,
     quote:
-      "What sets NSK apart is the equal emphasis on sports, arts, and academics. I discovered my passion for painting here, while never falling behind in my studies. It's been a life-changing experience.",
+      "NSK High School has excellent teachers and modern facilities. The staff is very cooperative and always ready to help students.",
+  },
+  {
+    name: "Priya Singh",
+    stars: 5,
+    quote:
+      "I am very satisfied with the education system of NSK High School. The school maintains good communication with parents and supports every child's growth.",
+  },
+  {
+    name: "Ankit Kumar",
+    stars: 5,
+    quote:
+      "The environment of NSK High School is very positive and motivating. Students get many opportunities to participate in sports and cultural activities.",
+  },
+  {
+    name: "Aditya Mishra",
+    stars: 5,
+    quote:
+      "NSK High School is one of the best schools in the area. The teachers guide students very well and help them build a strong future.",
   },
 ];
 
