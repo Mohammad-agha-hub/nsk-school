@@ -112,15 +112,7 @@ export default function LandingPage() {
             initial="hidden"
             animate="show"
           >
-            {/* Eyebrow badge */}
-            <motion.span
-              variants={heroItem}
-              className="mb-5 inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm text-white/80 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full"
-            >
-              India · CBSE Affiliated
-            </motion.span>
-
-            <motion.h1
+         <motion.h1
               variants={heroItem}
               className="font-heading text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight"
             >
