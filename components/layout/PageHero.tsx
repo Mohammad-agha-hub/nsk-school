@@ -13,7 +13,7 @@ interface PageHeroProps {
 export default function PageHero({
   title,
   eyebrow = "NSK High School",
-  backgroundImage = "/hero-bg.png",
+  backgroundImage = "/hero-bg.webp",
 }: PageHeroProps) {
   return (
     <section className="relative h-[52vh] min-h-[340px] max-h-[480px] flex flex-col items-center justify-center overflow-hidden">

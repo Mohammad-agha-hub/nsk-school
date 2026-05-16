@@ -87,7 +87,7 @@ export default function LandingPage() {
           transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] as const }}
         >
           <img
-            src="/hero-bg.png"
+            src="/hero-bg.webp"
             alt="School building"
             className="w-full h-full object-cover object-center"
           />
