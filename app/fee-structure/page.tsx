@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, IndianRupee, Mail } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
@@ -464,6 +465,7 @@ export default function FeeStructure() {
           </motion.div>
         </div>
       </div>
+      <Footer/>
     </main>
   );
 }

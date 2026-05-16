@@ -154,6 +154,7 @@ export default function GallerySection() {
       `}</style>
 
       <section
+      id="gallery"
         ref={ref}
         style={{
           background: "#E6F2F8",
@@ -305,7 +306,7 @@ export default function GallerySection() {
             }}
           >
             <a
-              href="#"
+              href="/gallery"
               className="gallery-cta bg-red-600 hover:bg-red-700 active:bg-red-800"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >

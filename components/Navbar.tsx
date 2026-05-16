@@ -15,10 +15,13 @@ const aboutItems = [
 const facilitiesGroups = [
   {
     label: "Facilities",
-    href: "/facilities",
+    href: "/facilities/transport-facility",
     children: [
       { label: "Transport Facility", href: "/facilities/transport-facility" },
-      { label: "Surveillance Security", href: "/facilities/surveillance-security" },
+      {
+        label: "Surveillance Security",
+        href: "/facilities/surveillance-security",
+      },
       { label: "Library", href: "/facilities/library" },
       { label: "Smart Class", href: "/facilities/smart-class" },
       { label: "Biology Lab", href: "/facilities/biology-lab" },
@@ -60,10 +63,13 @@ const facilitiesGroups = [
       { label: "Safety & Security", href: "/infrastructure/safety-security" },
       { label: "Fire Safety", href: "/infrastructure/fire-safety" },
       { label: "Infirmary", href: "/infrastructure/infirmary" },
-      { label: "Building Infrastructure", href: "/infrastructure/building-infrastructure" },
+      {
+        label: "Building Infrastructure",
+        href: "/infrastructure/building-infrastructure",
+      },
     ],
   },
-  { label: "Our Gallery", href: "#gallery", children: [] },
+  { label: "Our Gallery", href: "/gallery", children: [] },
 ];
 
 /* ── Animation presets ─────────────────────────────────── */
@@ -123,6 +129,7 @@ function NavItem({
     >
       <a
         href={href}
+        onClick={(e) => children && e.preventDefault()}
         className="flex items-center gap-1 text-white/80 hover:text-white text-[13.5px] font-medium whitespace-nowrap transition-colors duration-150"
       >
         {label}
@@ -214,9 +221,12 @@ function FacilitiesDropdown() {
       <div className="py-2 border-r border-white/15" style={{ minWidth: 175 }}>
         {facilitiesGroups.map((group, i) => {
           const isActive = activeGroup === group.label;
+          const hasChildren = group.children.length > 0;
+          const Tag = hasChildren ? "div" : "a";
           return (
-            <div
+            <Tag
               key={i}
+              {...(!hasChildren ? { href: group.href } : {})}
               onMouseEnter={() => setActiveGroup(group.label)}
               className={`flex items-center justify-between gap-2 px-5 py-2.5 cursor-pointer text-[13px] font-medium whitespace-nowrap transition-colors duration-150 ${
                 isActive
@@ -232,10 +242,8 @@ function FacilitiesDropdown() {
                 />
                 {group.label}
               </span>
-              {group.children.length > 0 && (
-                <ChevronRight size={12} className="opacity-60" />
-              )}
-            </div>
+              {hasChildren && <ChevronRight size={12} className="opacity-60" />}
+            </Tag>
           );
         })}
       </div>
@@ -474,67 +482,77 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
               >
                 {facilitiesGroups.map((group, i) => (
                   <div key={i}>
-                    <button
-                      onClick={() =>
-                        setMobileFacilitiesGroup(
-                          mobileFacilitiesGroup === group.label
-                            ? null
-                            : group.label,
-                        )
-                      }
-                      className="w-full flex items-center justify-between text-white/80 hover:text-white text-[13px] py-2 transition-colors duration-150"
-                    >
-                      <span className="flex items-center gap-2">
+                    {group.children.length === 0 ? (
+                      <a
+                        href={group.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 text-white/80 hover:text-white text-[13px] py-2 transition-colors duration-150"
+                      >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] opacity-70 flex-shrink-0" />
                         {group.label}
-                      </span>
-                      {group.children.length > 0 && (
-                        <motion.span
-                          animate={{
-                            rotate:
-                              mobileFacilitiesGroup === group.label ? 90 : 0,
-                          }}
-                          transition={{ duration: 0.18 }}
-                          style={{ display: "flex" }}
+                      </a>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() =>
+                            setMobileFacilitiesGroup(
+                              mobileFacilitiesGroup === group.label
+                                ? null
+                                : group.label,
+                            )
+                          }
+                          className="w-full flex items-center justify-between text-white/80 hover:text-white text-[13px] py-2 transition-colors duration-150"
                         >
-                          <ChevronRight size={12} className="opacity-60" />
-                        </motion.span>
-                      )}
-                    </button>
-
-                    <AnimatePresence initial={false}>
-                      {mobileFacilitiesGroup === group.label &&
-                        group.children.length > 0 && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{
-                              duration: 0.22,
-                              ease: [0.22, 1, 0.36, 1] as [
-                                number,
-                                number,
-                                number,
-                                number,
-                              ],
+                          <span className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C] opacity-70 flex-shrink-0" />
+                            {group.label}
+                          </span>
+                          <motion.span
+                            animate={{
+                              rotate:
+                                mobileFacilitiesGroup === group.label ? 90 : 0,
                             }}
-                            style={{ overflow: "hidden" }}
+                            transition={{ duration: 0.18 }}
+                            style={{ display: "flex" }}
                           >
-                            <div className="pl-5 pb-1">
-                              {group.children.map((sub, j) => (
-                                <a
-                                  key={j}
-                                  href={sub.href}
-                                  onClick={() => setMenuOpen(false)}
-                                  className="block text-white/75 hover:text-white text-[12.5px] py-1.5 transition-colors duration-150"
-                                >
-                                  {sub.label}
-                                </a>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                    </AnimatePresence>
+                            <ChevronRight size={12} className="opacity-60" />
+                          </motion.span>
+                        </button>
+
+                        <AnimatePresence initial={false}>
+                          {mobileFacilitiesGroup === group.label && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{
+                                duration: 0.22,
+                                ease: [0.22, 1, 0.36, 1] as [
+                                  number,
+                                  number,
+                                  number,
+                                  number,
+                                ],
+                              }}
+                              style={{ overflow: "hidden" }}
+                            >
+                              <div className="pl-5 pb-1">
+                                {group.children.map((sub, j) => (
+                                  <a
+                                    key={j}
+                                    href={sub.href}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="block text-white/75 hover:text-white text-[12.5px] py-1.5 transition-colors duration-150"
+                                  >
+                                    {sub.label}
+                                  </a>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    )}
                   </div>
                 ))}
               </MobileAccordion>

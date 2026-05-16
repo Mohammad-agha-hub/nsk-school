@@ -1,21 +1,21 @@
 import React from "react";
-import { MapPin, Mail, Phone, Navigation } from "lucide-react";
+import { MapPin, Mail, Phone } from "lucide-react";
 
 const Footer = () => {
   const quickLinks = [
-    { label: "Home", href: "#" },
-    { label: "About Us", href: "#" },
-    { label: "School Levels", href: "#" },
-    { label: "Facilities", href: "#" },
-    { label: "Testimonials", href: "#" },
+    { label: "Home", href: "/#home" },
+    { label: "About Us", href: "/#about" },
+    { label: "Facilities", href: "/#facilities" },
+    { label: "Gallery", href: "/#gallery" },
+    { label: "Contact Us", href: "/contact-us" },
   ];
 
   const facilities = [
-    { label: "Smart Classrooms", href: "#" },
-    { label: "Computer Lab", href: "#" },
-    { label: "Science Lab", href: "#" },
-    { label: "Library", href: "#" },
-    { label: "Sports Ground", href: "#" },
+    { label: "Smart Classrooms", href: "/facilities/smart-class" },
+    { label: "Computer Lab", href: "/facilities/computer-lab" },
+    { label: "Biology Lab", href: "/facilities/biology-lab" },
+    { label: "Library", href: "/facilities/library" },
+    { label: "Sports Ground", href: "/facilities/playground" },
   ];
 
   const socialLinks = [
@@ -75,10 +75,9 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#0d1b3e] text-white font-sans">
-      {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand Section */}
+          {/* Brand */}
           <div className="flex flex-col gap-5">
             <div>
               <span className="text-2xl font-extrabold tracking-tight text-white">
@@ -88,12 +87,10 @@ const Footer = () => {
                 High School
               </span>
             </div>
-
             <p className="text-sm text-gray-300 leading-relaxed max-w-xs">
               Quality Education for a Brighter Tomorrow. Nurturing young minds
               with academic excellence and character building since 2000.
             </p>
-
             <div className="flex gap-3 mt-1">
               {socialLinks.map(({ icon, href, label }) => (
                 <a
@@ -146,7 +143,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Us */}
+          {/* Contact */}
           <div>
             <h3 className="text-base font-semibold text-white mb-5 tracking-wide">
               Contact Us
@@ -176,36 +173,29 @@ const Footer = () => {
                   +91 88130 09409
                 </a>
               </li>
-              <li className="mt-1">
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
-                >
-                  <Navigation size={15} />
-                  Get Directions
-                </a>
-              </li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* Divider */}
       <div className="border-t border-white/10" />
 
-      {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p className="text-xs text-gray-400">
           Copyright 2026 NSK High School. All Rights Reserved.
         </p>
         <div className="flex items-center gap-5">
-          {["Privacy Policy", "Terms of Service", "Sitemap"].map((item) => (
+          {[
+            { label: "Privacy Policy", href: "#" },
+            { label: "Terms of Service", href: "#" },
+            { label: "FAQ", href: "/faq" },
+          ].map(({ label, href }) => (
             <a
-              key={item}
-              href="#"
+              key={label}
+              href={href}
               className="text-xs text-gray-400 hover:text-white transition-colors duration-200"
             >
-              {item}
+              {label}
             </a>
           ))}
         </div>

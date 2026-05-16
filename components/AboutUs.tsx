@@ -210,7 +210,7 @@ const AboutUs = () => {
         }
       `}</style>
 
-      <section className="bg-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section id="about" className="bg-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           {/* ── Eyebrow + heading ── */}
           <motion.div
@@ -324,17 +324,16 @@ const AboutUs = () => {
                 </p>
               </div>
 
-             
-                <div className="flex justify-center">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-red-600 hover:bg-red-700 w-[80%] sm:w-[40%] active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40"
-                  >
-                    Book An Appointment
-                  </motion.button>
-                </div>
-              
+              <div className="flex justify-center">
+                <motion.a
+                  href="/contact-us"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-red-600 hover:bg-red-700 w-[80%] sm:w-[40%] active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40 text-center"
+                >
+                  Book An Appointment
+                </motion.a>
+              </div>
             </motion.div>
           </div>
 

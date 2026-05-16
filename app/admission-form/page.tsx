@@ -8,20 +8,19 @@ import {
   ChevronDown,
   Check,
   User,
-  Calendar,
   Users,
   BookOpen,
   Mail,
-  Phone,
   MapPin,
   FileText,
   GraduationCap,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
 
-/* ── Grade groups ──────────────────────────────────────── */
 const gradeGroups = [
   { label: "Montessori", options: ["Mont-0", "Mont-1", "Mont-2"] },
   { label: "Primary School", options: ["1st", "2nd", "3rd", "4th", "5th"] },
@@ -152,17 +151,6 @@ const baseStyle = {
   background: "#fff",
 };
 
-const focusHandlers = (el: HTMLInputElement | HTMLTextAreaElement) => ({
-  onFocus: () => {
-    el.style.border = `1.5px solid ${NAVY}60`;
-    el.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
-  },
-  onBlur: () => {
-    el.style.border = "1.5px solid #e5e7eb";
-    el.style.boxShadow = "none";
-  },
-});
-
 function Field({
   label,
   required,
@@ -198,10 +186,8 @@ function Input({
   type?: string;
   required?: boolean;
 }) {
-  const ref = useRef<HTMLInputElement>(null);
   return (
     <input
-      ref={ref}
       type={type}
       required={required}
       value={value}
@@ -221,7 +207,6 @@ function Input({
   );
 }
 
-/* ── Section header ────────────────────────────────────── */
 function SectionHeader({
   icon: Icon,
   title,
@@ -253,39 +238,75 @@ function SectionHeader({
   );
 }
 
+const EMPTY_FORM = {
+  studentName: "",
+  dob: "",
+  gender: "",
+  bloodGroup: "",
+  nationality: "Indian",
+  religion: "",
+  category: "",
+  classApplying: "",
+  previousSchool: "",
+  previousClass: "",
+  parentName: "",
+  parentRelation: "",
+  parentOccupation: "",
+  parentEmail: "",
+  parentPhone: "",
+  altPhone: "",
+  address: "",
+  city: "",
+  state: "",
+  pincode: "",
+  notes: "",
+};
+
 /* ── Page ──────────────────────────────────────────────── */
 export default function AdmissionPage() {
-  const [form, setForm] = useState({
-    studentName: "",
-    dob: "",
-    gender: "",
-    bloodGroup: "",
-    nationality: "Indian",
-    religion: "",
-    category: "",
-    classApplying: "",
-    previousSchool: "",
-    previousClass: "",
-    parentName: "",
-    parentRelation: "",
-    parentOccupation: "",
-    parentEmail: "",
-    parentPhone: "",
-    altPhone: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-    notes: "",
-  });
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const [submitted, setSubmitted] = useState(false);
   const set = (key: keyof typeof form) => (v: string) =>
     setForm((f) => ({ ...f, [key]: v }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/admission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error ?? "Something went wrong.");
+      }
+
+      setStatus("success");
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Unexpected error.");
+      setStatus("error");
+    }
+  };
+
+  const textareaHandlers = {
+    onFocus: (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      e.currentTarget.style.border = `1.5px solid ${NAVY}60`;
+      e.currentTarget.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
+    },
+    onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      e.currentTarget.style.border = "1.5px solid #e5e7eb";
+      e.currentTarget.style.boxShadow = "none";
+    },
   };
 
   return (
@@ -296,7 +317,7 @@ export default function AdmissionPage() {
       {/* ── Hero ── */}
       <div
         className="relative overflow-hidden"
-        style={{ background: NAVY, marginBottom: 80,paddingBottom:50 }}
+        style={{ background: NAVY, marginBottom: 80, paddingBottom: 50 }}
       >
         <div
           style={{
@@ -396,7 +417,6 @@ export default function AdmissionPage() {
             below and our admissions team will reach out within 48 hours.
           </motion.p>
 
-          {/* Ornament */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -434,7 +454,7 @@ export default function AdmissionPage() {
       {/* ── Content ── */}
       <div className="flex-1 -mt-10 relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-3xl mx-auto">
-          {submitted ? (
+          {status === "success" ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -486,7 +506,10 @@ export default function AdmissionPage() {
                 ))}
               </div>
               <button
-                onClick={() => setSubmitted(false)}
+                onClick={() => {
+                  setStatus("idle");
+                  setForm(EMPTY_FORM);
+                }}
                 className="mt-3 text-[13px] font-semibold underline underline-offset-2 hover:text-red-600 transition-colors"
                 style={{ color: NAVY }}
               >
@@ -505,7 +528,7 @@ export default function AdmissionPage() {
               <div
                 className="px-8 py-5 flex items-center justify-between"
                 style={{
-                  background: `${NAVY}`,
+                  background: NAVY,
                   borderBottom: `1px solid ${NAVY}20`,
                 }}
               >
@@ -530,6 +553,23 @@ export default function AdmissionPage() {
               </div>
 
               <div className="p-6 sm:p-8 flex flex-col gap-8">
+                {/* Error banner */}
+                {status === "error" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-start gap-3 px-4 py-3 rounded-lg text-[13px]"
+                    style={{
+                      background: "#fef2f2",
+                      border: "1px solid #fecaca",
+                      color: "#b91c1c",
+                    }}
+                  >
+                    <AlertCircle size={15} className="mt-0.5 flex-shrink-0" />
+                    <span>{errorMsg}</span>
+                  </motion.div>
+                )}
+
                 {/* ── Section 1: Student Info ── */}
                 <div>
                   <SectionHeader
@@ -624,7 +664,6 @@ export default function AdmissionPage() {
                   </div>
                 </div>
 
-                {/* Divider */}
                 <div className="h-px" style={{ background: `${NAVY}08` }} />
 
                 {/* ── Section 2: Academic Info ── */}
@@ -643,7 +682,6 @@ export default function AdmissionPage() {
                         groups={gradeGroups}
                       />
                     </Field>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Previous School Name">
                         <Input
@@ -691,7 +729,6 @@ export default function AdmissionPage() {
                         />
                       </Field>
                     </div>
-
                     <Field label="Occupation">
                       <Input
                         placeholder="e.g. Business Owner"
@@ -699,7 +736,6 @@ export default function AdmissionPage() {
                         onChange={set("parentOccupation")}
                       />
                     </Field>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Email Address" required>
                         <Input
@@ -719,7 +755,6 @@ export default function AdmissionPage() {
                         />
                       </Field>
                     </div>
-
                     <Field label="Alternate Phone">
                       <Input
                         placeholder="e.g. +91 98765 43210"
@@ -749,17 +784,9 @@ export default function AdmissionPage() {
                         placeholder="House No., Street, Area"
                         className={inputCls + " resize-none"}
                         style={baseStyle}
-                        onFocus={(e) => {
-                          e.currentTarget.style.border = `1.5px solid ${NAVY}60`;
-                          e.currentTarget.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.border = "1.5px solid #e5e7eb";
-                          e.currentTarget.style.boxShadow = "none";
-                        }}
+                        {...textareaHandlers}
                       />
                     </Field>
-
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                       <Field label="City">
                         <Input
@@ -803,31 +830,32 @@ export default function AdmissionPage() {
                       placeholder="Any specific requirements, medical conditions, or other information..."
                       className={inputCls + " resize-none"}
                       style={baseStyle}
-                      onFocus={(e) => {
-                        e.currentTarget.style.border = `1.5px solid ${NAVY}60`;
-                        e.currentTarget.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
-                      }}
-                      onBlur={(e) => {
-                        e.currentTarget.style.border = "1.5px solid #e5e7eb";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
+                      {...textareaHandlers}
                     />
                   </Field>
                 </div>
 
-               
-
                 {/* ── Submit ── */}
                 <div className="flex flex-col items-center gap-3">
                   <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: status === "loading" ? 1 : 1.01 }}
+                    whileTap={{ scale: status === "loading" ? 1 : 0.98 }}
                     type="submit"
-                    className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold text-[14px] py-4 rounded-xl transition-colors duration-150 flex items-center justify-center gap-2"
+                    disabled={status === "loading"}
+                    className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-[14px] py-4 rounded-xl transition-colors duration-150 flex items-center justify-center gap-2"
                     style={{ boxShadow: "0 4px 20px rgba(200,16,46,0.3)" }}
                   >
-                    <Send size={15} />
-                    Submit Application
+                    {status === "loading" ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin" />
+                        Submitting…
+                      </>
+                    ) : (
+                      <>
+                        <Send size={15} />
+                        Submit Application
+                      </>
+                    )}
                   </motion.button>
                   <p className="text-stone-400 text-[11.5px]">
                     Fields marked{" "}

@@ -78,7 +78,7 @@ const statItem = {
 export default function LandingPage() {
   return (
     <main className="font-body">
-      <section className="relative min-h-screen flex flex-col overflow-hidden">
+      <section id="home" className="relative min-h-screen flex flex-col overflow-hidden">
         {/* Background — slow, gentle zoom */}
         <motion.div
           className="absolute inset-0 z-0 overflow-hidden"
@@ -95,11 +95,6 @@ export default function LandingPage() {
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#0d1f3c]/60 to-transparent" />
         </motion.div>
 
-        {/* Navbar
-            z-[200] here is critical — this motion.div creates the stacking
-            context for the Navbar. If this is z-10, the dropdown (even at
-            z-[201] inside) can never paint above other z-10 siblings like
-            the hero content below. */}
         <motion.div
           className="relative z-[200]"
           initial={{ opacity: 0, y: -10 }}
@@ -109,7 +104,7 @@ export default function LandingPage() {
           <Navbar />
         </motion.div>
 
-        {/* Hero Content — z-10 keeps it above the background but below the navbar */}
+        {/* Hero Content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8 pt-20">
           <motion.div
             className="max-w-4xl mx-auto flex flex-col items-center"
@@ -156,21 +151,23 @@ export default function LandingPage() {
               variants={heroItem}
               className="flex flex-col sm:flex-row gap-3 justify-center mt-9"
             >
-              <motion.button
+              <motion.a
+                href="/admission-form"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer shadow-lg shadow-red-900/40"
               >
                 Enroll Now
-              </motion.button>
+              </motion.a>
 
-              <motion.button
+              <motion.a
+                href="/contact-us"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-white/5 hover:bg-white/10 border border-white/25 text-white/90 px-10 py-3 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer"
               >
                 Book a Visit
-              </motion.button>
+              </motion.a>
             </motion.div>
 
             {/* Scroll indicator */}

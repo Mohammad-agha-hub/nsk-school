@@ -291,6 +291,7 @@ export default function Facilities() {
       `}</style>
 
       <section
+      id="facilities"
         style={{
           background: ALICE,
           padding: "88px 20px",

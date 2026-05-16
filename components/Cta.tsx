@@ -160,7 +160,6 @@ export default function CTABanner() {
           letter-spacing: -.01em;
         }
 
-        /* ── Button — white, rounded-lg (matches landing page) ── */
         .cta-btn {
           flex-shrink: 0;
           display: inline-flex;
@@ -253,9 +252,6 @@ export default function CTABanner() {
           </div>
 
           {/* ── Right: button ── */}
-          {/* Entrance animation lives on the wrapper so the <a>'s own
-              CSS hover transform: scale() is never overridden by an
-              inline style on the same element. */}
           <div
             style={{
               flexShrink: 0,
@@ -264,7 +260,7 @@ export default function CTABanner() {
               transition: "opacity .7s ease .18s, transform .7s ease .18s",
             }}
           >
-            <a href="#" className="cta-btn">
+            <a href="/admission-form" className="cta-btn">
               Apply Now
               <svg
                 className="cta-btn-arrow"

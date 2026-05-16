@@ -1,9 +1,9 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, MapPin, Send, ChevronDown, Check } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Send, Loader2, AlertCircle } from "lucide-react";
 
 const NAVY = "#0D1B38";
 const GOLD = "#C9A84C";
@@ -38,137 +38,6 @@ const contactCards = [
   },
 ];
 
-const gradeGroups = [
-  {
-    label: "Montessori",
-    options: ["Mont-0", "Mont-1", "Mont-2"],
-  },
-  {
-    label: "Primary School",
-    options: ["1st", "2nd", "3rd", "4th", "5th"],
-  },
-  {
-    label: "Secondary School",
-    options: ["6th", "7th", "8th", "9th"],
-  },
-  {
-    label: "Senior Secondary",
-    options: ["11th Commerce", "11th Science"],
-  },
-];
-
-/* ── Custom Select ─────────────────────────────────────── */
-function CustomSelect({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node))
-        setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  return (
-    <div ref={ref} className="relative">
-      {/* Trigger */}
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 rounded-lg border text-[13.5px] transition-all duration-150 text-left"
-        style={{
-          border: open ? `1.5px solid ${NAVY}60` : "1.5px solid #e5e7eb",
-          background: open ? `${NAVY}04` : "#fff",
-          color: value ? NAVY : "#9ca3af",
-          boxShadow: open ? `0 0 0 3px ${NAVY}0A` : "none",
-        }}
-      >
-        <span className={value ? "font-medium" : ""}>
-          {value || "Select a class"}
-        </span>
-        <motion.span
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          style={{ display: "flex", color: open ? NAVY : "#9ca3af" }}
-        >
-          <ChevronDown size={15} />
-        </motion.span>
-      </button>
-
-      {/* Dropdown */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.98 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute z-50 mt-2 w-full rounded-xl border border-stone-200 bg-white shadow-xl overflow-hidden"
-            style={{ boxShadow: "0 8px 32px rgba(13,27,56,0.12)" }}
-          >
-            <div className="max-h-64 overflow-y-auto py-2">
-              {gradeGroups.map((group) => (
-                <div key={group.label}>
-                  {/* Group label */}
-                  <div
-                    className="px-4 pt-3 pb-1 text-[10px] font-bold tracking-[0.18em] uppercase"
-                    style={{ color: `${NAVY}55` }}
-                  >
-                    {group.label}
-                  </div>
-                  {group.options.map((opt) => {
-                    const selected = value === opt;
-                    return (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => {
-                          onChange(opt);
-                          setOpen(false);
-                        }}
-                        className="w-full flex items-center justify-between px-4 py-2.5 text-[13.5px] text-left transition-colors duration-100"
-                        style={{
-                          background: selected ? `${GOLD}15` : "transparent",
-                          color: selected ? NAVY : "#374151",
-                          fontWeight: selected ? 600 : 400,
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!selected)
-                            e.currentTarget.style.background = `${NAVY}06`;
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!selected)
-                            e.currentTarget.style.background = "transparent";
-                        }}
-                      >
-                        <span>{opt}</span>
-                        {selected && (
-                          <span style={{ color: GOLD }}>
-                            <Check size={13} strokeWidth={2.5} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/* ── Shared input class ─────────────────────────────────── */
 const inputCls =
   "w-full rounded-lg px-4 py-3 text-[13.5px] transition-all duration-150 outline-none";
 
@@ -189,21 +58,44 @@ const inputFocusHandlers = {
   },
 };
 
-/* ── Page ──────────────────────────────────────────────── */
-export default function ContactPage() {
-  const [form, setForm] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-    applyFor: "",
-    address: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+const EMPTY_FORM = {
+  name: "",
+  mobile: "",
+  email: "",
+  address: "",
+  message: "",
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
+export default function ContactPage() {
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error ?? "Something went wrong.");
+      }
+
+      setStatus("success");
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Unexpected error.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -356,7 +248,7 @@ export default function ContactPage() {
                 Fill in the form and our team will be in touch shortly.
               </p>
 
-              {submitted ? (
+              {status === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -380,15 +272,8 @@ export default function ContactPage() {
                   </p>
                   <button
                     onClick={() => {
-                      setSubmitted(false);
-                      setForm({
-                        name: "",
-                        mobile: "",
-                        email: "",
-                        applyFor: "",
-                        address: "",
-                        message: "",
-                      });
+                      setStatus("idle");
+                      setForm(EMPTY_FORM);
                     }}
                     className="mt-4 text-[13px] font-semibold underline underline-offset-2 hover:text-red-600 transition-colors"
                     style={{ color: NAVY }}
@@ -398,6 +283,23 @@ export default function ContactPage() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                  {/* Error banner */}
+                  {status === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-start gap-3 px-4 py-3 rounded-lg text-[13px]"
+                      style={{
+                        background: "#fef2f2",
+                        border: "1px solid #fecaca",
+                        color: "#b91c1c",
+                      }}
+                    >
+                      <AlertCircle size={15} className="mt-0.5 flex-shrink-0" />
+                      <span>{errorMsg}</span>
+                    </motion.div>
+                  )}
+
                   {/* Name + Mobile */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
@@ -461,20 +363,6 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  {/* Apply For — custom dropdown */}
-                  <div className="flex flex-col gap-2">
-                    <label
-                      className="text-[11px] font-bold tracking-[0.15em] uppercase"
-                      style={{ color: `${NAVY}70` }}
-                    >
-                      Applying For
-                    </label>
-                    <CustomSelect
-                      value={form.applyFor}
-                      onChange={(v) => setForm({ ...form, applyFor: v })}
-                    />
-                  </div>
-
                   {/* Address */}
                   <div className="flex flex-col gap-2">
                     <label
@@ -524,13 +412,23 @@ export default function ContactPage() {
                   </div>
 
                   <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: status === "loading" ? 1 : 1.01 }}
+                    whileTap={{ scale: status === "loading" ? 1 : 0.98 }}
                     type="submit"
-                    className="mt-1 w-full bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold text-[13.5px] py-3.5 rounded-lg transition-colors duration-150 shadow-sm shadow-red-900/20 flex items-center justify-center gap-2"
+                    disabled={status === "loading"}
+                    className="mt-1 w-full bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-[13.5px] py-3.5 rounded-lg transition-colors duration-150 shadow-sm shadow-red-900/20 flex items-center justify-center gap-2"
                   >
-                    <Send size={14} />
-                    Submit Enquiry
+                    {status === "loading" ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <Send size={14} />
+                        Submit Enquiry
+                      </>
+                    )}
                   </motion.button>
 
                   <p className="text-center text-stone-400 text-[11.5px]">
