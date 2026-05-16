@@ -333,15 +333,7 @@ export default function Facilities() {
           >
             <motion.p
               variants={fadeUp}
-              style={{
-                fontFamily: "'Inter',sans-serif",
-                fontWeight: 600,
-                fontSize: ".72rem",
-                letterSpacing: ".2em",
-                textTransform: "uppercase",
-                color: CRIMSON,
-                marginBottom: 8,
-              }}
+              className={`text-red-700 text-sm font-semibold tracking-[0.2em] uppercase font-body mb-1`}
             >
               Why Choose Us
             </motion.p>

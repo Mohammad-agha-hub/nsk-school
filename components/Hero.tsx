@@ -78,7 +78,7 @@ const statItem = {
 export default function LandingPage() {
   return (
     <main className="font-body">
-      <section className="relative min-h-screen flex flex-col">
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
         {/* Background — slow, gentle zoom */}
         <motion.div
           className="absolute inset-0 z-0 overflow-hidden"

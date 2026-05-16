@@ -257,16 +257,13 @@ export default function AfterSchoolActivities() {
               transform: inView ? "translateY(0)" : "translateY(24px)",
             }}
           >
-            <div className="inline-flex items-center gap-2 mb-4">
-              <span className="block w-6 h-px" style={{ background: RED }} />
+            
               <span
-                className="text-xs font-semibold tracking-[.22em] uppercase"
-                style={{ fontFamily: "'DM Sans', sans-serif", color: RED }}
+                className="text-red-700 text-sm font-semibold tracking-[0.2em] uppercase font-body "
               >
                 Beyond the Classroom
               </span>
-              <span className="block w-6 h-px" style={{ background: RED }} />
-            </div>
+             
 
             <h2
               className="text-4xl md:text-[3rem] leading-tight mb-5"
@@ -359,8 +356,6 @@ export default function AfterSchoolActivities() {
               </div>
             ))}
           </div>
-
-         
         </div>
       </section>
     </>

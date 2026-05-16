@@ -280,7 +280,9 @@ export default function Testimonials() {
             transform: inView ? "translateY(0)" : "translateY(24px)",
           }}
         >
-          <p className="ts-eyebrow">Our Testimonial</p>
+          <p className="text-red-700 text-sm font-semibold tracking-[0.2em] uppercase font-body ">
+            Our Testimonial
+          </p>
 
           <h2 className="ts-heading">
             Student <em style={{ fontStyle: "italic", color: GOLD }}>Say</em>{" "}
@@ -416,7 +418,6 @@ export default function Testimonials() {
             />
           ))}
         </div>
-
       </section>
     </>
   );

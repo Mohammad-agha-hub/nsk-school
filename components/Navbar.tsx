@@ -7,60 +7,60 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 
 /* ── Dropdown data ─────────────────────────────────────── */
 const aboutItems = [
-  { label: "Introduction", href: "#introduction" },
-  { label: "Chairman's Desk", href: "#chairman" },
-  { label: "Principal's Desk", href: "#principal" },
+  { label: "Introduction", href: "/about/introduction" },
+  { label: "Principal's Desk", href: "/about/principal-desk" },
+  { label: "Chairman's Desk", href: "/about/chairman-desk" },
 ];
 
 const facilitiesGroups = [
   {
     label: "Facilities",
-    href: "#facilities",
+    href: "/facilities",
     children: [
-      { label: "Transport Facility", href: "#transport" },
-      { label: "Surveillance Security", href: "#surveillance" },
-      { label: "Library", href: "#library" },
-      { label: "Smart Class", href: "#smart-class" },
-      { label: "Biology Lab", href: "#biology-lab" },
-      { label: "Computer Lab", href: "#computer-lab" },
-      { label: "Chemistry Lab", href: "#chemistry-lab" },
-      { label: "Play Ground", href: "#playground" },
-      { label: "Physics Lab", href: "#physics-lab" },
+      { label: "Transport Facility", href: "/facilities/transport-facility" },
+      { label: "Surveillance Security", href: "/facilities/surveillance-security" },
+      { label: "Library", href: "/facilities/library" },
+      { label: "Smart Class", href: "/facilities/smart-class" },
+      { label: "Biology Lab", href: "/facilities/biology-lab" },
+      { label: "Computer Lab", href: "/facilities/computer-lab" },
+      { label: "Chemistry Lab", href: "/facilities/chemistry-lab" },
+      { label: "Play Ground", href: "/facilities/playground" },
+      { label: "Physics Lab", href: "/facilities/physics-lab" },
     ],
   },
   {
     label: "Sports",
-    href: "#sports",
+    href: "/Kids",
     children: [
-      { label: "Kids Class", href: "#kids-class" },
-      { label: "Kids Study", href: "#kids-study" },
-      { label: "Kids Play", href: "#kids-play" },
-      { label: "Kids Fun", href: "#kids-fun" },
+      { label: "Kids Class", href: "/Kids/kids-class" },
+      { label: "Kids Study", href: "/Kids/kids-study" },
+      { label: "Kids Play", href: "/Kids/kids-play" },
+      { label: "Kids Fun", href: "/Kids/kids-fun" },
     ],
   },
   {
     label: "Events",
-    href: "#events",
+    href: "/events",
     children: [
-      { label: "Annual Day", href: "#annual-day" },
-      { label: "Sports Activity", href: "#sports-activity" },
-      { label: "Cultural Activity", href: "#cultural-activity" },
-      { label: "Rules and Regulations", href: "#rules-regulations" },
-      { label: "Exhibition", href: "#exhibition" },
+      { label: "Annual Day", href: "/events/annual-day" },
+      { label: "Sports Activity", href: "/events/sports-activity" },
+      { label: "Cultural Activity", href: "/events/cultural-activity" },
+      { label: "Rules and Regulations", href: "/events/rules-regulations" },
+      { label: "Exhibition", href: "/events/exhibition" },
     ],
   },
   {
     label: "Infrastructure",
-    href: "#infrastructure",
+    href: "/infrastructure",
     children: [
-      { label: "Our Reception", href: "#our-reception" },
-      { label: "Morning Assembly", href: "#morning-assembly" },
-      { label: "Discipline", href: "#discipline" },
-      { label: "Music Class", href: "#music-class" },
-      { label: "Safety & Security", href: "#safety-security" },
-      { label: "Fire Safety", href: "#fire-safety" },
-      { label: "Infirmary", href: "#infirmary" },
-      { label: "Building Infrastructure", href: "#building-infrastructure" },
+      { label: "Our Reception", href: "/infrastructure/reception" },
+      { label: "Morning Assembly", href: "/infrastructure/morning-assembly" },
+      { label: "Discipline", href: "/infrastructure/discipline" },
+      { label: "Music Class", href: "/infrastructure/music-class" },
+      { label: "Safety & Security", href: "/infrastructure/safety-security" },
+      { label: "Fire Safety", href: "/infrastructure/fire-safety" },
+      { label: "Infirmary", href: "/infrastructure/infirmary" },
+      { label: "Building Infrastructure", href: "/infrastructure/building-infrastructure" },
     ],
   },
   { label: "Our Gallery", href: "#gallery", children: [] },
@@ -344,12 +344,10 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
     string | null
   >(null);
 
-  /* Bar style switches between glass (hero) and solid navy (inner pages) */
   const barStyle = solid
     ? "bg-[#0d1f3c] border-white/10"
     : "bg-white/10 backdrop-blur-md border-white/20";
 
-  /* Mobile drawer style matches */
   const drawerStyle = solid
     ? "bg-[#0d1f3c] border-white/10"
     : "bg-white/10 backdrop-blur-md border-white/20";
@@ -362,41 +360,44 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
       >
         {/* Logo */}
         <div className="flex-shrink-0">
-          <Image
-            className="rounded-full"
-            width={52}
-            height={52}
-            src="/logo.jpeg"
-            alt="NSK High School"
-          />
+          <a href="/">
+            <Image
+              className="rounded-full"
+              width={52}
+              height={52}
+              src="/logo.jpeg"
+              alt="NSK High School"
+              loading="eager"
+            />
+          </a>
         </div>
 
         {/* Desktop Links */}
         <div className="hidden lg:flex gap-8 items-center">
           <a
-            href="#"
+            href="/"
             className="text-white/80 hover:text-white text-[13.5px] font-medium whitespace-nowrap transition-colors duration-150"
           >
             Home
           </a>
 
-          <NavItem label="About" href="#about">
+          <NavItem label="About" href="/about/introduction">
             <AboutDropdown />
           </NavItem>
 
-          <NavItem label="Our Facilities" href="#facilities">
+          <NavItem label="Our Facilities" href="/facilities">
             <FacilitiesDropdown />
           </NavItem>
 
           <a
-            href="#fees"
+            href="/fee-structure"
             className="text-white/80 hover:text-white text-[13.5px] font-medium whitespace-nowrap transition-colors duration-150"
           >
             Fee Structure
           </a>
 
           <a
-            href="#disclosure"
+            href="/mandatory-disclosure-page"
             className="text-white/80 hover:text-white text-[13.5px] font-medium whitespace-nowrap transition-colors duration-150"
           >
             Mandatory Public Disclosure
@@ -405,13 +406,14 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
 
         {/* CTA + Hamburger */}
         <div className="flex items-center gap-3">
-          <motion.button
+          <motion.a
+            href="/contact-us"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="hidden lg:inline-flex bg-red-600 hover:bg-red-700 active:bg-red-800 px-6 py-2.5 text-white font-semibold text-[13.5px] rounded-lg transition-colors duration-150 cursor-pointer shadow-md shadow-red-900/30"
           >
             Contact Us
-          </motion.button>
+          </motion.a>
           <button
             className="lg:hidden text-white p-1.5 rounded-md hover:bg-white/10 transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -440,7 +442,7 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
               className={`border border-t-0 rounded-b-xl px-6 py-4 flex flex-col shadow-lg ${drawerStyle}`}
             >
               <a
-                href="#"
+                href="/"
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center justify-between text-white/80 hover:text-white text-sm font-medium py-3 border-b border-white/10 transition-colors duration-150"
               >
@@ -449,7 +451,7 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
 
               <MobileAccordion
                 label="About"
-                href="#about"
+                href="/about/introduction"
                 onClose={() => setMenuOpen(false)}
               >
                 {aboutItems.map((item, i) => (
@@ -467,7 +469,7 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
 
               <MobileAccordion
                 label="Our Facilities"
-                href="#facilities"
+                href="/facilities"
                 onClose={() => setMenuOpen(false)}
               >
                 {facilitiesGroups.map((group, i) => (
@@ -538,7 +540,7 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
               </MobileAccordion>
 
               <a
-                href="#fees"
+                href="/fee-structure"
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center justify-between text-white/80 hover:text-white text-sm font-medium py-3 border-b border-white/10 transition-colors duration-150"
               >
@@ -546,20 +548,22 @@ const Navbar = ({ solid = false }: { solid?: boolean }) => {
               </a>
 
               <a
-                href="#disclosure"
+                href="/mandatory-disclosure-page"
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center justify-between text-white/80 hover:text-white text-sm font-medium py-3 border-b border-white/10 transition-colors duration-150"
               >
                 Mandatory Public Disclosure
               </a>
 
-              <motion.button
+              <motion.a
+                href="/contact-us"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="mt-4 bg-red-600 hover:bg-red-700 text-white py-2.5 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer"
+                className="mt-4 bg-red-600 hover:bg-red-700 text-white py-2.5 font-semibold text-sm rounded-lg transition-colors duration-150 cursor-pointer text-center"
+                onClick={() => setMenuOpen(false)}
               >
                 Contact Us
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
         )}

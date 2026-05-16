@@ -19,8 +19,7 @@ const page = () => {
       <AfterSchoolActivities />
       <ImageGallary />
       <Testimonials />
-      <CTABanner/>
-      
+      <CTABanner />
     </div>
   );
 }

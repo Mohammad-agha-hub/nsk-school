@@ -1,18 +1,19 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, MapPin, Send, ChevronDown, Check } from "lucide-react";
 
-/* ── Animations ────────────────────────────────────────── */
+const NAVY = "#0D1B38";
+const GOLD = "#C9A84C";
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
 });
 
-/* ── Contact info ──────────────────────────────────────── */
 const contactCards = [
   {
     icon: Mail,
@@ -37,6 +38,157 @@ const contactCards = [
   },
 ];
 
+const gradeGroups = [
+  {
+    label: "Montessori",
+    options: ["Mont-0", "Mont-1", "Mont-2"],
+  },
+  {
+    label: "Primary School",
+    options: ["1st", "2nd", "3rd", "4th", "5th"],
+  },
+  {
+    label: "Secondary School",
+    options: ["6th", "7th", "8th", "9th"],
+  },
+  {
+    label: "Senior Secondary",
+    options: ["11th Commerce", "11th Science"],
+  },
+];
+
+/* ── Custom Select ─────────────────────────────────────── */
+function CustomSelect({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-4 py-3 rounded-lg border text-[13.5px] transition-all duration-150 text-left"
+        style={{
+          border: open ? `1.5px solid ${NAVY}60` : "1.5px solid #e5e7eb",
+          background: open ? `${NAVY}04` : "#fff",
+          color: value ? NAVY : "#9ca3af",
+          boxShadow: open ? `0 0 0 3px ${NAVY}0A` : "none",
+        }}
+      >
+        <span className={value ? "font-medium" : ""}>
+          {value || "Select a class"}
+        </span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          style={{ display: "flex", color: open ? NAVY : "#9ca3af" }}
+        >
+          <ChevronDown size={15} />
+        </motion.span>
+      </button>
+
+      {/* Dropdown */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute z-50 mt-2 w-full rounded-xl border border-stone-200 bg-white shadow-xl overflow-hidden"
+            style={{ boxShadow: "0 8px 32px rgba(13,27,56,0.12)" }}
+          >
+            <div className="max-h-64 overflow-y-auto py-2">
+              {gradeGroups.map((group) => (
+                <div key={group.label}>
+                  {/* Group label */}
+                  <div
+                    className="px-4 pt-3 pb-1 text-[10px] font-bold tracking-[0.18em] uppercase"
+                    style={{ color: `${NAVY}55` }}
+                  >
+                    {group.label}
+                  </div>
+                  {group.options.map((opt) => {
+                    const selected = value === opt;
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => {
+                          onChange(opt);
+                          setOpen(false);
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-[13.5px] text-left transition-colors duration-100"
+                        style={{
+                          background: selected ? `${GOLD}15` : "transparent",
+                          color: selected ? NAVY : "#374151",
+                          fontWeight: selected ? 600 : 400,
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!selected)
+                            e.currentTarget.style.background = `${NAVY}06`;
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!selected)
+                            e.currentTarget.style.background = "transparent";
+                        }}
+                      >
+                        <span>{opt}</span>
+                        {selected && (
+                          <span style={{ color: GOLD }}>
+                            <Check size={13} strokeWidth={2.5} />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ── Shared input class ─────────────────────────────────── */
+const inputCls =
+  "w-full rounded-lg px-4 py-3 text-[13.5px] transition-all duration-150 outline-none";
+
+const inputStyle = {
+  border: "1.5px solid #e5e7eb",
+  color: NAVY,
+  background: "#fff",
+};
+
+const inputFocusHandlers = {
+  onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.border = `1.5px solid ${NAVY}60`;
+    e.currentTarget.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
+  },
+  onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.border = "1.5px solid #e5e7eb";
+    e.currentTarget.style.boxShadow = "none";
+  },
+};
+
 /* ── Page ──────────────────────────────────────────────── */
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -55,50 +207,141 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="font-body min-h-screen bg-white flex flex-col">
-      {/* Navbar */}
-      <div className="relative z-[200]">
-        <Navbar solid />
-      </div>
+    <main
+      className="font-body min-h-screen flex flex-col"
+      style={{ background: "#F7F9FC" }}
+    >
+      {/* ── Hero ── */}
+      <div
+        className="relative overflow-hidden"
+        style={{ background: NAVY, marginBottom: 72, paddingBottom: 50 }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `repeating-linear-gradient(-45deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 18px)`,
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: `linear-gradient(90deg, transparent, ${GOLD}, ${GOLD}88, transparent)`,
+            opacity: 0.7,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "-60px",
+            right: "-80px",
+            width: 400,
+            height: 400,
+            borderRadius: "50%",
+            background: `${GOLD}12`,
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
 
-      <div className="flex-1">
-        {/* ── Hero strip ── */}
-        <div className="text-center pt-16 pb-12 px-4">
+        <div className="relative z-[200]">
+          <Navbar />
+        </div>
+
+        <div className="relative z-10 text-center px-4 pt-10 pb-0">
           <motion.span
-            {...fadeUp(0)}
-            className="inline-flex items-center gap-2 bg-[#0d1f3c]/6 border border-[#0d1f3c]/12 text-[#0d1f3c]/60 text-[11px] font-bold tracking-[0.22em] uppercase px-4 py-1.5 rounded-full mb-5"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 border text-[11px] font-bold tracking-[0.22em] uppercase px-4 py-1.5 rounded-full mb-5"
+            style={{
+              background: "rgba(201,168,76,0.1)",
+              borderColor: `${GOLD}40`,
+              color: GOLD,
+            }}
           >
             <Mail size={10} />
             Get in Touch
           </motion.span>
 
           <motion.h1
-            {...fadeUp(0.08)}
-            className="font-heading text-[#0d1f3c] text-4xl sm:text-5xl font-bold tracking-tight"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: 0.08,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="font-heading text-white text-4xl sm:text-5xl font-bold tracking-tight mb-4"
           >
             We'd love to{" "}
-            <span
+            <em
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontStyle: "italic",
-                color: "#C9A84C",
+                color: GOLD,
               }}
             >
               hear
-            </span>{" "}
+            </em>{" "}
             from you
           </motion.h1>
 
           <motion.p
-            {...fadeUp(0.15)}
-            className="mt-3 text-stone-400 text-[14px] max-w-md mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.55,
+              delay: 0.16,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="text-white/50 text-[14px] max-w-md mx-auto leading-relaxed mb-10"
           >
             Whether it's an admission enquiry, a general question, or just a
             hello — reach out and we'll get back to you.
           </motion.p>
-        </div>
 
-        {/* ── Main grid: form + info ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex items-center justify-center gap-3"
+          >
+            <div
+              className="h-px w-16"
+              style={{
+                background: `linear-gradient(90deg, transparent, ${GOLD}40)`,
+              }}
+            />
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: GOLD }}
+            />
+            <div
+              className="w-2 h-2 rounded-full border"
+              style={{ borderColor: `${GOLD}50` }}
+            />
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: GOLD }}
+            />
+            <div
+              className="h-px w-16"
+              style={{
+                background: `linear-gradient(90deg, ${GOLD}40, transparent)`,
+              }}
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── Main content ── */}
+      <div className="flex-1 -mt-10 relative z-10">
         <div className="px-4 sm:px-6 lg:px-8 pb-16">
           <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
             {/* ── Contact form ── */}
@@ -119,10 +362,16 @@ export default function ContactPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center justify-center py-12 text-center gap-3"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#0d1f3c]/8 flex items-center justify-center mb-2">
-                    <Send size={22} className="text-[#0d1f3c]" />
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center mb-2"
+                    style={{ background: `${GOLD}18` }}
+                  >
+                    <Send size={22} style={{ color: GOLD }} />
                   </div>
-                  <h3 className="font-heading text-[#0d1f3c] font-bold text-lg">
+                  <h3
+                    className="font-heading font-bold text-lg"
+                    style={{ color: NAVY }}
+                  >
                     Message Sent!
                   </h3>
                   <p className="text-stone-400 text-[13.5px] max-w-xs">
@@ -141,18 +390,22 @@ export default function ContactPage() {
                         message: "",
                       });
                     }}
-                    className="mt-4 text-[13px] font-semibold text-[#0d1f3c] underline underline-offset-2 hover:text-red-600 transition-colors"
+                    className="mt-4 text-[13px] font-semibold underline underline-offset-2 hover:text-red-600 transition-colors"
+                    style={{ color: NAVY }}
                   >
                     Send another message
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                   {/* Name + Mobile */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
-                        Name
+                    <div className="flex flex-col gap-2">
+                      <label
+                        className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                        style={{ color: `${NAVY}70` }}
+                      >
+                        Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
                         required
@@ -160,12 +413,17 @@ export default function ContactPage() {
                         onChange={(e) =>
                           setForm({ ...form, name: e.target.value })
                         }
-                        placeholder="Your full name"
-                        className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] placeholder-stone-300 focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150"
+                        placeholder="e.g. Rahul Sharma"
+                        className={inputCls}
+                        style={inputStyle}
+                        {...inputFocusHandlers}
                       />
                     </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
+                    <div className="flex flex-col gap-2">
+                      <label
+                        className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                        style={{ color: `${NAVY}70` }}
+                      >
                         Mobile No.
                       </label>
                       <input
@@ -173,16 +431,21 @@ export default function ContactPage() {
                         onChange={(e) =>
                           setForm({ ...form, mobile: e.target.value })
                         }
-                        placeholder="+91 00000 00000"
-                        className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] placeholder-stone-300 focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150"
+                        placeholder="e.g. +91 98765 43210"
+                        className={inputCls}
+                        style={inputStyle}
+                        {...inputFocusHandlers}
                       />
                     </div>
                   </div>
 
                   {/* Email */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
-                      Email
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                      style={{ color: `${NAVY}70` }}
+                    >
+                      Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -191,52 +454,33 @@ export default function ContactPage() {
                       onChange={(e) =>
                         setForm({ ...form, email: e.target.value })
                       }
-                      placeholder="you@example.com"
-                      className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] placeholder-stone-300 focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150"
+                      placeholder="e.g. you@example.com"
+                      className={inputCls}
+                      style={inputStyle}
+                      {...inputFocusHandlers}
                     />
                   </div>
 
-                  {/* Apply For */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
-                      Apply For
-                    </label>
-                    <select
-                      value={form.applyFor}
-                      onChange={(e) =>
-                        setForm({ ...form, applyFor: e.target.value })
-                      }
-                      className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150 bg-white"
+                  {/* Apply For — custom dropdown */}
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                      style={{ color: `${NAVY}70` }}
                     >
-                      <option value="" disabled>
-                        Select class
-                      </option>
-                      {[
-                        "Mont-0",
-                        "Mont-1",
-                        "Mont-2",
-                        "1st",
-                        "2nd",
-                        "3rd",
-                        "4th",
-                        "5th",
-                        "6th",
-                        "7th",
-                        "8th",
-                        "9th",
-                        "11th Commerce",
-                        "11th Science",
-                      ].map((g) => (
-                        <option key={g} value={g}>
-                          {g}
-                        </option>
-                      ))}
-                    </select>
+                      Applying For
+                    </label>
+                    <CustomSelect
+                      value={form.applyFor}
+                      onChange={(v) => setForm({ ...form, applyFor: v })}
+                    />
                   </div>
 
                   {/* Address */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                      style={{ color: `${NAVY}70` }}
+                    >
                       Address
                     </label>
                     <input
@@ -244,14 +488,19 @@ export default function ContactPage() {
                       onChange={(e) =>
                         setForm({ ...form, address: e.target.value })
                       }
-                      placeholder="Your address"
-                      className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] placeholder-stone-300 focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150"
+                      placeholder="e.g. 12 Green Park, New Delhi"
+                      className={inputCls}
+                      style={inputStyle}
+                      {...inputFocusHandlers}
                     />
                   </div>
 
                   {/* Message */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-bold tracking-[0.15em] uppercase text-stone-400">
+                  <div className="flex flex-col gap-2">
+                    <label
+                      className="text-[11px] font-bold tracking-[0.15em] uppercase"
+                      style={{ color: `${NAVY}70` }}
+                    >
                       Message
                     </label>
                     <textarea
@@ -261,7 +510,16 @@ export default function ContactPage() {
                         setForm({ ...form, message: e.target.value })
                       }
                       placeholder="How can we help you?"
-                      className="w-full border border-stone-200 rounded-lg px-4 py-3 text-[13.5px] text-[#0d1f3c] placeholder-stone-300 focus:outline-none focus:border-[#0d1f3c]/40 focus:ring-2 focus:ring-[#0d1f3c]/8 transition-all duration-150 resize-none"
+                      className={inputCls + " resize-none"}
+                      style={inputStyle}
+                      onFocus={(e) => {
+                        e.currentTarget.style.border = `1.5px solid ${NAVY}60`;
+                        e.currentTarget.style.boxShadow = `0 0 0 3px ${NAVY}0A`;
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.border = "1.5px solid #e5e7eb";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
                     />
                   </div>
 
@@ -272,8 +530,13 @@ export default function ContactPage() {
                     className="mt-1 w-full bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold text-[13.5px] py-3.5 rounded-lg transition-colors duration-150 shadow-sm shadow-red-900/20 flex items-center justify-center gap-2"
                   >
                     <Send size={14} />
-                    Submit
+                    Submit Enquiry
                   </motion.button>
+
+                  <p className="text-center text-stone-400 text-[11.5px]">
+                    Fields marked <span className="text-red-500">*</span> are
+                    required
+                  </p>
                 </form>
               )}
             </motion.div>
@@ -287,19 +550,35 @@ export default function ContactPage() {
                   target={card.href.startsWith("http") ? "_blank" : undefined}
                   rel="noreferrer"
                   {...fadeUp(0.25 + i * 0.08)}
-                  className="group flex items-start gap-4 bg-white border border-stone-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-[#0d1f3c]/20 transition-all duration-200"
+                  className="group flex items-start gap-4 bg-white border border-stone-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-200"
+                  style={{ borderLeft: "3px solid transparent" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.borderLeftColor = GOLD)
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.borderLeftColor = "transparent")
+                  }
                 >
-                  <div className="w-10 h-10 rounded-lg bg-[#0d1f3c]/6 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0d1f3c]/10 transition-colors duration-150">
-                    <card.icon size={17} className="text-[#0d1f3c]/60" />
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: `${NAVY}08` }}
+                  >
+                    <card.icon size={17} style={{ color: `${NAVY}90` }} />
                   </div>
                   <div>
-                    <p className="text-[#0d1f3c] font-semibold text-[13.5px] mb-0.5">
+                    <p
+                      className="font-semibold text-[13.5px] mb-0.5"
+                      style={{ color: NAVY }}
+                    >
                       {card.title}
                     </p>
                     <p className="text-stone-400 text-[12px] mb-2">
                       {card.subtitle}
                     </p>
-                    <p className="text-[#0d1f3c]/80 text-[13px] font-medium leading-snug">
+                    <p
+                      className="text-[13px] font-medium leading-snug"
+                      style={{ color: `${NAVY}CC` }}
+                    >
                       {card.value}
                     </p>
                   </div>
@@ -309,28 +588,56 @@ export default function ContactPage() {
               {/* Hours card */}
               <motion.div
                 {...fadeUp(0.5)}
-                className="bg-[#0d1f3c] rounded-xl p-5"
+                className="rounded-xl p-5 relative overflow-hidden"
+                style={{ background: NAVY }}
               >
-                <p className="text-white font-semibold text-[13.5px] mb-3">
-                  School Hours
-                </p>
-                <div className="flex flex-col gap-2">
-                  {[
-                    { day: "Mon – Fri", time: "8:00 AM – 2:30 PM" },
-                    { day: "Saturday", time: "8:00 AM – 12:30 PM" },
-                    { day: "Sunday", time: "Closed" },
-                  ].map((row, i) => (
-                    <div key={i} className="flex items-center justify-between">
-                      <span className="text-white/50 text-[12.5px]">
-                        {row.day}
-                      </span>
-                      <span
-                        className={`text-[12.5px] font-medium ${row.time === "Closed" ? "text-red-400" : "text-[#C9A84C]"}`}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage: `repeating-linear-gradient(-45deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 18px)`,
+                    pointerEvents: "none",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 2,
+                    background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
+                    opacity: 0.6,
+                  }}
+                />
+                <div className="relative z-10">
+                  <p className="text-white font-semibold text-[13.5px] mb-3">
+                    School Hours
+                  </p>
+                  <div className="flex flex-col gap-2.5">
+                    {[
+                      { day: "Mon – Fri", time: "8:00 AM – 2:30 PM" },
+                      { day: "Saturday", time: "8:00 AM – 12:30 PM" },
+                      { day: "Sunday", time: "Closed" },
+                    ].map((row, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between"
                       >
-                        {row.time}
-                      </span>
-                    </div>
-                  ))}
+                        <span className="text-white/50 text-[12.5px]">
+                          {row.day}
+                        </span>
+                        <span
+                          className="text-[12.5px] font-semibold"
+                          style={{
+                            color: row.time === "Closed" ? "#f87171" : GOLD,
+                          }}
+                        >
+                          {row.time}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             </div>

@@ -198,17 +198,7 @@ export default function GallerySection() {
               transition: "opacity 0.7s ease, transform 0.7s ease",
             }}
           >
-            <span
-              style={{
-                color: CRIMSON,
-                fontSize: ".72rem",
-                fontWeight: 600,
-                letterSpacing: ".2em",
-                textTransform: "uppercase",
-                display: "block",
-                marginBottom: 8,
-              }}
-            >
+            <span className="text-red-700 text-sm font-semibold tracking-[0.2em] uppercase font-body ">
               Image Gallery
             </span>
 
